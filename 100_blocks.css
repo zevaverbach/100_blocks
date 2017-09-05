@@ -2,7 +2,7 @@ div#gridcontainer
 {
     width: 800px;
     line-height: 0;
-clear: both;
+    clear: both;
 }
 
 div.griditem, div.palette
@@ -10,9 +10,10 @@ div.griditem, div.palette
     display: inline-block;            
     width: 70px;
     height: 70px;
-    margin-left: 4px;
-    margin-bottom: 8px;
+    margin-left: 2px;
+    margin-bottom: 6px;
     background: #AAA;
+    border: 1px solid black;
 }
 
 div.palette {
