@@ -1,3 +1,20 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/static/css/100_blocks.css"/>
+  </head>
+  
+  <body>
+
+    <div id="save"><a href="javascript:save();">Save Board</a></div>
+	<div id="palettes"></div>
+	<div id="current-palette"></div>
+    <div id="gridcontainer"></div>
+
+    <script type="text/javascript">
+
+/// begin JavaScript
+
 function changeColor(o){
 
     o.style.backgroundColor = o.style.backgroundColor == paletteColor ? '#AAA' : paletteColor;
@@ -12,10 +29,39 @@ function setPalette(o) {
 
 }
 
+function save() {
+    boxes = document.getElementsByClassName('griditem');
+    layout = '';
+
+    for (var box of boxes) {
+      num = colorNumLookup[box.style.backgroundColor];
+      if (num == undefined) {
+          num = 0;
+      }
+      layout += num
+    } 
+
+    var data = new FormData();
+    data.append("json", JSON.stringify(layout));
+    console.log(data)
+
+    fetch("/save/", {
+
+        headers: {'Accept': 'application/json',
+                  'Content-Type': 'application/json'},
+        method: "POST", 
+        body: data});
+
+
+}
+
 
 window.onload = function () {
 
-  paletteColors = ['red', 'blue', 'yellow', 'green'];
+  paletteColors = {{ colors | tojson }};
+  colorLabelLookup = {{ color_label_dict | tojson }}; 
+  colorNumLookup = {{ color_num_dict | tojson }};
+  console.log(colorNumLookup);
   paletteColor = paletteColors[0];
   gridContainer = document.getElementById('gridcontainer');
   palettesDiv = document.getElementById('palettes');
@@ -56,3 +102,7 @@ window.onload = function () {
   
 
 }
+</script>
+  </body>
+
+</html>
