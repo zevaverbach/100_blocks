@@ -14,5 +14,8 @@ class Board(Base):
     __tablename__ = 'boards'
 
     id = Column(Integer, primary_key=True)
-    layout = Column(String(100), nullable=False)
+    layout = Column(String(528), nullable=False)
     name = Column(String(50), nullable=False)
+
+    def __repr__(self):
+        return f'<Layout> name: {self.name} {self.layout}'

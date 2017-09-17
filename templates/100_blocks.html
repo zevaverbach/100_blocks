@@ -41,18 +41,16 @@ function save() {
       layout += num
     } 
 
-    var data = new FormData();
-    data.append("json", JSON.stringify(layout));
-    console.log(data)
-
-    fetch("/save/", {
+    console.log(layout);
+    fetch("/save", {
 
         headers: {'Accept': 'application/json',
                   'Content-Type': 'application/json'},
         method: "POST", 
-        body: data});
+        body: JSON.stringify({layout: layout})
 
 
+})
 }
 
 
@@ -66,7 +64,7 @@ window.onload = function () {
   gridContainer = document.getElementById('gridcontainer');
   palettesDiv = document.getElementById('palettes');
 
-  for (i=0; i<100; i++) {
+  for (i=0; i<264; i++) {
   
     box = document.createElement('div');
     box.className = 'griditem';

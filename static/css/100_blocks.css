@@ -6,28 +6,26 @@
 
 #gridcontainer
 {
-    width: 800px;
+    width: 1700px;
     line-height: 0;
     clear: both;
 }
 
-.griditem, .palette
+.griditem
 {
     display: inline-block;            
     width: 70px;
     height: 70px;
-    margin-left: 2px;
-    margin-bottom: 6px;
+    margin-left: -4px;
     background: #AAA;
-    border: 1px solid black;
 }
 
 .palette {
 
-    border-radius: 50%;
-    margin-left: 20px;
+    display: inline-block;            
     margin-top: 30px;
-    border: 2px solid black;
+    width: 70px;
+    height: 70px;
 
 }
 
@@ -37,7 +35,6 @@
     height: 90px;
     float: right;
     margin: 20px 60px 30px;
-    border: 2px solid black;
 
 }
 
