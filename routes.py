@@ -1,50 +1,40 @@
 import random
 from string import ascii_lowercase
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 
-from models import Board, session
+from config import config
+from models import session, get_color_num_dict, base_board, colors, color_num_dict, get_board, get_boards, \
+    create_board
 
 app = Flask(__name__)
 
+num_squares = config['num_squares']
+
+
+
+@app.route('/<board_name>')
+def main_board(board_name=None):
+    return render_template('100_blocks.html',
+                           all_boards=get_boards(),
+                           board=get_board(name=board_name) or base_board)
 
 @app.route('/')
 def main():
-    color_label_dict = {'red':'exercise',
-                        'blue':'work',
-                        'yellow':'admin',
-                        'green':'finance',
-                        '#2C2416':'',
-                        'black':'',
-                        '#F98D8D':'',
-                        'orange':'',
-                        'white': '',
-                        '#1a1b29': '',
-                        '#000080': '',
-                        '#333333':'',
-                        '#CF5300': '',
-                        '#8B0000': '',
-                       }
-
-    colors = list(color_label_dict.keys())
-    color_num_dict = {'': 0}
-    color_num_dict = {color: str(idx + 1).zfill(2) for idx, color in enumerate(colors)}
-
     return render_template('100_blocks.html',
-                           colors=colors,
-                           color_label_dict=color_label_dict,
-                           color_num_dict=color_num_dict)
+                           all_boards=get_boards(),
+                           board=base_board)
 
 
 @app.route('/save', methods=['POST'])
 def save():
-    name = ''
-    for i in range(12):
-        name += random.choice(ascii_lowercase)
-    layout = list(request.get_json().values())[0]
-    session.add(Board(layout=layout, name=name))
-    session.commit()
-    return jsonify(session.query(Board).first().layout)
+    layout, board_name = request.get_json().values()
+    board = get_board(name=board_name)
+    if board is not None:
+        board.update(layout)
+    else:
+        board = create_board(layout, board_name, colors)
+    return jsonify(board.layout)
 
 
 

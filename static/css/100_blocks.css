@@ -1,6 +1,6 @@
 :root {
     font-family: Arial, sans-serif;
-    background: #333;
+    background: rgb(250,250,250);
 }
 
 
@@ -17,13 +17,13 @@
     width: 70px;
     height: 70px;
     margin-left: -4px;
-    background: #AAA;
+    background: rgb(250,250,250);
 }
 
 .palette {
 
     display: inline-block;            
-    margin-top: 30px;
+    margin-top: 10px;
     width: 70px;
     height: 70px;
 
@@ -34,8 +34,11 @@
     width: 90px;
     height: 90px;
     float: right;
-    margin: 20px 60px 30px;
+    margin: 10px 10px 10px;
 
+}
+
+#load {
 }
 
 

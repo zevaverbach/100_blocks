@@ -8,6 +8,17 @@
   <body>
 
     <div id="save"><a href="javascript:save();">Save Board</a></div>
+    {% if all_boards %}
+        <div id="load-div">
+
+            <select name="load" id="load">  
+                {% for board in all_boards %} 
+                    <option id="{{board.name}}" href="/{{board.name}}">{{board.name}}</option>
+                {% endfor %}
+            </select>
+
+        </div>
+    {% endif %}
 	<div id="palettes"></div>
 	<div id="current-palette"></div>
     <div id="gridcontainer"></div>
@@ -16,9 +27,12 @@
 
 /// begin JavaScript
 
+board_name = "{{board.name}}";
+num_clicks = '';
+
 function changeColor(o){
 
-    o.style.backgroundColor = o.style.backgroundColor == paletteColor ? '#AAA' : paletteColor;
+    o.style.backgroundColor = o.style.backgroundColor == paletteColor ? 'rgb(250,250,250)' : paletteColor;
 
     }
 
@@ -26,7 +40,6 @@ function changeColor(o){
 function setPalette(o) {
 
     paletteColor = o.style.backgroundColor;
-    currentPaletteDiv.style.backgroundColor = paletteColor;
 
 }
 
@@ -42,13 +55,17 @@ function save() {
       layout += num
     } 
 
-    console.log(layout);
+    while (board_name == '') {
+        board_name = prompt('what would you like to name it?');
+    }
+
     fetch("/save", {
 
         headers: {'Accept': 'application/json',
                   'Content-Type': 'application/json'},
         method: "POST", 
-        body: JSON.stringify({layout: layout})
+        body: JSON.stringify({layout: layout, 
+                              board_name: board_name})
 
 
 })
@@ -57,15 +74,13 @@ function save() {
 
 window.onload = function () {
 
-  paletteColors = {{ colors | tojson }};
-  colorLabelLookup = {{ color_label_dict | tojson }}; 
-  colorNumLookup = {{ color_num_dict | tojson }};
-  console.log(colorNumLookup);
+  paletteColors = {{ board.color_list | tojson }};
+  colorNumLookup = {{ board.color_num_dict | tojson }};
   paletteColor = paletteColors[0];
   gridContainer = document.getElementById('gridcontainer');
   palettesDiv = document.getElementById('palettes');
 
-  for (i=0; i<264; i++) {
+  for (i=0; i<312; i++) {
   
     box = document.createElement('div');
     box.className = 'griditem';
@@ -73,6 +88,10 @@ window.onload = function () {
     box.addEventListener('click', function () {
 
          changeColor(this);
+         num_clicks++;
+         if (board_name != '' || board_name == '' && num_clicks > 25) {
+             save();
+         }
 
     });
 
@@ -96,9 +115,13 @@ window.onload = function () {
 
 }
 
-  currentPaletteDiv = document.getElementById('current-palette')
-  currentPaletteDiv.style.backgroundColor = paletteColor;
-  
+loader = document.getElementById('load');
+loader.onchange = function() {
+
+     window.open('http://0.0.0.0:5000/' + loader.options[loader.selectedIndex].id )
+
+}
+
 
 }
 </script>
