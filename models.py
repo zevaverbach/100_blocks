@@ -83,6 +83,12 @@ def prep_colors_for_table(some_colors):
     return palette
 
 
+def update_base_table():
+    base_board = get_board()
+    base_board.palette = ''.join(colors)
+    session.commit()
+
+
 base_board = get_board(name='') or create_board('', '00' * num_squares, colors)
 
 # each number is represented by a two-digit integer string
